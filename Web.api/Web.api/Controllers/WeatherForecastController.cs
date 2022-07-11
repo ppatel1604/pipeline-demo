@@ -23,6 +23,12 @@ namespace Web.api.Controllers
         {
             _logger.LogInformation("Getting weather forcast information");
 
+            if(maxNumberOfDays <= 0)
+            {
+                _logger.LogError("Max number of days are set less than 0.");
+                return Array.Empty<WeatherForecast>();
+            }
+
             if(maxNumberOfDays > 5)
             {
                 // Assumption: 5 is the maximum number of days for the weather forecast
