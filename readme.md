@@ -1,0 +1,1 @@
+[![Coverage Status](https://coveralls.io/repos/github/ppatel1604/pipeline-demo/badge.svg?branch=pr-workflow)](https://coveralls.io/github/ppatel1604/pipeline-demo?branch=pr-workflow)
