@@ -34,6 +34,8 @@ param aspSize string = 'F1'
 ])
 param aspTier string = 'Free'
 
+param webappName string = '${environmentShortCode}-webApp-${regionShortCode}'
+
 
 // App Service Plan
 resource AppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
@@ -52,4 +54,28 @@ resource AppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
     tier: aspTier
   }
   kind: 'linux'
+  properties:{
+    reserved: true
+  }
+}
+
+// Web app
+resource webApplication 'Microsoft.Web/sites@2022-03-01' = {
+  name: webappName
+  location: location
+  tags: {
+    environment: environmentShortCode
+    location: regionShortCode
+    servoce: 'web'
+  }
+  kind: 'app,linux,container'
+  properties: {
+    serverFarmId: AppServicePlan.id
+    siteConfig: {
+      linuxFxVersion: 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      scmMinTlsVersion: '1.2'
+    }
+  }
 }
