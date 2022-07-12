@@ -1,0 +1,24 @@
+ARG BUILD_IMG_TAG=6.0-alpine
+ARG RUNTIME_IMG_TAG=6.0-alpine
+
+FROM mcr.microsoft.com/dotnet/sdk:${BUILD_IMG_TAG} AS build-env
+WORKDIR /build
+
+# Restore Nuget Packages
+COPY ./Web.api ./
+RUN dotnet restore
+
+# Publish a release
+RUN dotnet publish -c Release -o out --no-restore
+
+# Create Runtime Image
+FROM mcr.microsoft.com/dotnet/aspnet:${RUNTIME_IMG_TAG}
+WORKDIR /app
+COPY --from=build-env /build/out .
+
+# Set Variables and expose ports
+ENV ASPNETCORE_URLS=http://*:80
+ENV ASPNETCORE_ENVIRONMENT="production"
+EXPOSE 80
+
+ENTRYPOINT [ "dotnet", "Web.api.dll" ]
