@@ -10,25 +10,27 @@ param aspCapacity int = 1
 
 @allowed([
   'F'
-  'S'
+  'B'
 ])
 param aspFamily string = 'F'
 
 @allowed([
   'F1'
-  'S1'
+  'B1'
+  'B2'
 ])
 param aspName string = 'F1'
 
 @allowed([
   'F1'
-  'S1'
+  'B1'
+  'B2'
 ])
 param aspSize string = 'F1'
 
 @allowed([
   'Free'
-  'Standard'
+  'Basic'
 ])
 param aspTier string = 'Free'
 
@@ -40,6 +42,7 @@ resource AppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   tags: {
     environment: environmentShortCode
     location: regionShortCode
+    servoce: 'asp'
   }
   sku: {
     capacity: aspCapacity
