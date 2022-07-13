@@ -18,6 +18,6 @@ jobs:
       docker_login_password: ${{ secrets.docker_login_password }}
 
   analysis:
-    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@docker-build
+    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@docker-build
     with:
       config_file_path: ./github/codeql/config.yml
