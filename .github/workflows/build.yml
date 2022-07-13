@@ -92,7 +92,7 @@ jobs:
           github-token: ${{ secrets.code_coverage_token }} 
           path-to-lcov: ${{ inputs.coverage_info_file_path }} 
 
-      - name: Upload upload_artifacts
+      - name: Upload build artifacts
         if: ${{ inputs.upload_artifacts }}
         uses: actions/upload-artifact@v3
         with:

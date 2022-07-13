@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@docker-build
+    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@main
     with:
       solution_path: ./Web.api/Web.api.sln
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
@@ -13,13 +13,13 @@ jobs:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
 
   analysis:
-    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@docker-build
+    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@main
     with:
       config_file_path: ./.github/codeql/config.yml
 
   docker:
     needs: [build, analysis]
-    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@docker-build
+    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@main
     with:
       docker_file_directory: ./Web.api
       docker_repository_name: pipeline-demo
