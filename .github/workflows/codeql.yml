@@ -28,16 +28,13 @@ jobs:
         name: Checkout
 
       - name: Intialize
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.languages}}
           config-file: ${{ inputs.config_file_path }}
 
       - name: Build
-        uses: github/codeql-action/autobuild@v1
+        uses: github/codeql-action/autobuild@v2
 
       - name: Analysis
-        uses: github/codeql-action/analyze@v1
-
-    
-       
+        uses: github/codeql-action/analyze@v2
