@@ -13,7 +13,7 @@ jobs:
       solution_path: ./Web.api/Web.api.sln
       docker_file_directory: ./Web.api
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
-      docker_image_tag: $major_version.$minor_version.$GITHUB_RUN_NUMBER
+      docker_image_tag: ${{ env.major_version }}.${{ env.minor_version }}.${{ env.GITHUB_RUN_NUMBER }}
     secrets:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
       docker_login_username: ${{ secrets.docker_login_username }}
