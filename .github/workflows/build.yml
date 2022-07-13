@@ -11,6 +11,11 @@ on:
         required: true
         type: string
         description: Path to coverage file
+      dotnet_versiosns:
+        required: false
+        type: string
+        default: '6.0.x'
+
     secrets:
       code_coverage_token:
         required: true
@@ -20,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['6.0.x' ]
+        dotnet-version: ['${{inputs.dotnet_versiosns}}']
 
     steps:      
       - uses: actions/checkout@v3
