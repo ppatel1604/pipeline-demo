@@ -73,7 +73,11 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
-      - uses: actions/cache@v2
+      - uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+
+      - uses: actions/cache@v1
         id: nuget-cache
         with:
           path: ${{ github.workspace }}/.nuget/packages
