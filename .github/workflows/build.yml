@@ -29,6 +29,11 @@ on:
         type: string
         description: Docker repository name for the new images
 
+      artifacts_file_path:
+        required: true
+        type: string
+        description: Path for the artifact files/directories
+
       dotnet_versiosns:
         required: false
         type: string
@@ -46,6 +51,12 @@ on:
         type: boolean
         default: true
         description: A flag to create docker image and push to repository
+
+      upload_artifacts:
+        required: false
+        type: boolean
+        default: true
+        description: A flag to indicate weather job will need to upload an artifact
 
     secrets:
       code_coverage_token:
@@ -128,4 +139,12 @@ jobs:
           tags: ${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:${{ inputs.docker_image_tag }}
           cache-from: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache
           cache-to: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache,mode=max
+
+      - name: Upload upload_artifacts
+        if: ${{ inputs.upload_artifacts }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: buildArtifacts
+          path: |
+            ${{ inputs.artifacts_file_path }}
 
