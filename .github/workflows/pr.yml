@@ -20,4 +20,4 @@ jobs:
   analysis:
     uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@docker-build
     with:
-      config_file_path: ./github/codeql/config.yml
+      config_file_path: ./.github/codeql/config.yml
