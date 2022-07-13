@@ -2,11 +2,19 @@ name: pull request
 
 on: [push]
 
+env:
+  major_version: 0
+  minor_version: 0.0
+
 jobs:
   build:
     uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@main
     with:
       solution_path: ./Web.api/Web.api.sln
+      docker_file_directory: ./Web.api
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
+      docker_image_tag: ${{ secrets.docker_login_username }}/${{ env.major_version }}.${{ env.minor_version }}.${{ env.GITHUB_RUN_NUMBER }}
     secrets:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
+      docker_login_username: ${{ secrets.docker_login_username }}
+      docker_login_password: ${{ secrets.docker_login_password }}
