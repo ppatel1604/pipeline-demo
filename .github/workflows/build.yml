@@ -111,5 +111,5 @@ jobs:
         with:
           context: ${{ inputs.docker_file_directory }}
           push: true
-          tags: ${{ inputs.docker_image_tag }}
+          tags: ${{ secrets.docker_login_username }}/pipeline-demo:${{ inputs.docker_image_tag }}
 
