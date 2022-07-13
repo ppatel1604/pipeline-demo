@@ -74,6 +74,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - uses: actions/cache@v2
+        id: nuget-cache
         with:
           path: ${{ github.workspace }}/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -82,6 +83,7 @@ jobs:
         name: Cache nuget packages
 
       - name: Install dependencies
+        if: ${{ steps.nuget-cache.outputs.cache-hit != 'true' }}
         run: dotnet restore ${{ inputs.solution_path }} --locked-mode
 
       - name: Build
