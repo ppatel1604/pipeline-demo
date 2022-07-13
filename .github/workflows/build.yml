@@ -24,6 +24,11 @@ on:
         type: string
         description: Docker tag used for the image
 
+      docker_repository_name:
+        required: true
+        type: string
+        description: Docker repository name for the new images
+
       dotnet_versiosns:
         required: false
         type: string
@@ -111,5 +116,7 @@ jobs:
         with:
           context: ${{ inputs.docker_file_directory }}
           push: true
-          tags: ${{ secrets.docker_login_username }}/pipeline-demo:${{ inputs.docker_image_tag }}
+          tags: ${{ secrets.docker_login_username }}/${{ inputs.docker_file_directory }}:${{ inputs.docker_image_tag }}
+          cache-from: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache
+          cache-to: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache,mode=max
 
