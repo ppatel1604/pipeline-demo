@@ -83,15 +83,15 @@ jobs:
         run: dotnet build ${{ inputs.solution_path }} --configuration Release --no-restore
 
       - name: Test with code coverage
-        if: ${{ include_code_coverage }}
+        if: ${{ inputs.include_code_coverage }}
         run: dotnet test ${{ inputs.solution_path }} --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
       - name: Test without code coverage
-        if: false == ${{ include_code_coverage }}
+        if: false == ${{ inputs.include_code_coverage }}
         run: dotnet test ${{ inputs.solution_path }} --no-restore --verbosity normal
 
       - name: Publish coverage report to coveralls.io
-        if: ${{ include_code_coverage }}  
+        if: ${{ inputs.include_code_coverage }}  
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.code_coverage_token }} 
