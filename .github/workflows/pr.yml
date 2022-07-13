@@ -7,12 +7,23 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@main
     with:
       solution_path: ./Web.api/Web.api.sln
-      docker_file_directory: ./Web.api
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
-      docker_repository_name: pipeline-demo
-      docker_image_tag: 0.0.0.${{ github.run_number }}
       artifacts_file_path: ./operations
     secrets:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
+
+  analysis:
+    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@main
+    with:
+      config_file_path: ./.github/codeql/config.yml
+
+  docker:
+    needs: [build, analysis]
+    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@main
+    with:
+      docker_file_directory: ./Web.api
+      docker_repository_name: pipeline-demo
+      docker_image_tag: 0.0.0.${{ github.run_number }}
+    secrets:
       docker_login_username: ${{ secrets.docker_login_username }}
       docker_login_password: ${{ secrets.docker_login_password }}

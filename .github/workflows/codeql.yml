@@ -1,0 +1,40 @@
+name: CodeQL
+
+on:
+  workflow_call:
+    
+    inputs:
+      config_file_path:
+        required: true
+        type: string
+        description: Path for the config for the code ql analysis
+
+      languages:
+        required: false
+        type: string
+        default: 'csharp'
+        description: language to be used for build and analysis
+
+jobs:
+  scan:
+   runs-on: ubuntu-latest
+   strategy:
+     fail-fast: false
+     matrix:
+      languages: ['${{ inputs.languages }}']
+   
+   steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+
+      - name: Intialize
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.languages}}
+          config-file: ${{ inputs.config_file_path }}
+
+      - name: Build
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Analysis
+        uses: github/codeql-action/analyze@v2

@@ -1,4 +1,4 @@
-name: Build, Test and Push
+name: Build and Test
 
 on:
   workflow_call:
@@ -13,21 +13,6 @@ on:
         required: true
         type: string
         description: Path to coverage file
-
-      docker_file_directory:
-        required: true
-        type: string
-        description: Directory path to docker file
-
-      docker_image_tag:
-        required: true
-        type: string
-        description: Docker tag used for the image
-
-      docker_repository_name:
-        required: true
-        type: string
-        description: Docker repository name for the new images
 
       artifacts_file_path:
         required: true
@@ -46,12 +31,6 @@ on:
         default: true
         description: A flag indicate if the code coverage should be included as part of the build
 
-      do_docker_build_push:
-        required: false
-        type: boolean
-        default: true
-        description: A flag to create docker image and push to repository
-
       upload_artifacts:
         required: false
         type: boolean
@@ -60,12 +39,6 @@ on:
 
     secrets:
       code_coverage_token:
-        required: true
-
-      docker_login_username:
-        required: true
-
-      docker_login_password:
         required: true
 
 jobs:
@@ -119,32 +92,10 @@ jobs:
           github-token: ${{ secrets.code_coverage_token }} 
           path-to-lcov: ${{ inputs.coverage_info_file_path }} 
 
-      - name: Setup docker buildx
-        if: ${{ inputs.do_docker_build_push }}  
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to DockerHub
-        if: ${{ inputs.do_docker_build_push }}  
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.docker_login_username }}
-          password: ${{ secrets.docker_login_password }}
-
-      - name: Build and push
-        if: ${{ inputs.do_docker_build_push }}  
-        uses: docker/build-push-action@v3
-        with:
-          context: ${{ inputs.docker_file_directory }}
-          push: true
-          tags: ${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:${{ inputs.docker_image_tag }}
-          cache-from: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:buildcache,mode=max
-
-      - name: Upload upload_artifacts
+      - name: Upload build artifacts
         if: ${{ inputs.upload_artifacts }}
         uses: actions/upload-artifact@v3
         with:
           name: buildArtifacts
           path: |
             ${{ inputs.artifacts_file_path }}
-
