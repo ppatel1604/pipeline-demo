@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@docker-build
+    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@main
     with:
       solution_path: ./Web.api/Web.api.sln
       docker_file_directory: ./Web.api
