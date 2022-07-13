@@ -16,3 +16,8 @@ jobs:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
       docker_login_username: ${{ secrets.docker_login_username }}
       docker_login_password: ${{ secrets.docker_login_password }}
+
+  analysis:
+    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@docker-build
+    with:
+      config_file_path: ./github/codeql/config.yml
