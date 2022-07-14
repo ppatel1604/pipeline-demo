@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/download-artifact@v3
@@ -24,4 +24,4 @@ jobs:
         run: |
           $resourceGroup = Get-AzResourceGroup -Name "pipeline-demo"
           echo $resourceGroup
-        shell: powershell
+        shell: pwsh
