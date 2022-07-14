@@ -62,8 +62,8 @@ jobs:
         with:
           subscriptionId: ${{ secrets.subscription_id }}
           resourceGroupName: ${{ inputs.resource_group_name }}
-          template: ./main.bicep
-          parameters: ./dev.parameters.json
+          template: ./buildArtifacts/main.bicep
+          parameters: ./buildArtifacts/dev.parameters.json
           failOnStdErr: false
 
       
