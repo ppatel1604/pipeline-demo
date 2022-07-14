@@ -4,6 +4,12 @@
     "parameters": {
       "environmentShortCode": {
         "value": "dev"
+      },
+      "location": {
+        "value": "west us"
+      },
+      "regionShortCode": {
+        "value": "wus"
       }
     }
   }
