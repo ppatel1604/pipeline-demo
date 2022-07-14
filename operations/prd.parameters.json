@@ -4,6 +4,9 @@
     "parameters": {
       "environmentShortCode": {
         "value": "prd"
+      },
+      "location": {
+        "value": "north europe"
       }
     }
   }
