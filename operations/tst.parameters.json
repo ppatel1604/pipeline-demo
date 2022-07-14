@@ -4,6 +4,9 @@
     "parameters": {
       "environmentShortCode": {
         "value": "tst"
+      },
+      "location":{
+        "value": "canada central"
       }
     }
   }

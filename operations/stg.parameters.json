@@ -4,6 +4,9 @@
     "parameters": {
       "environmentShortCode": {
         "value": "stg"
+      },
+      "location": {
+        "value": "australia southeast"
       }
     }
   }
