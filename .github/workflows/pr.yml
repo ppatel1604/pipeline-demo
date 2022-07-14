@@ -30,22 +30,15 @@ jobs:
 
   deploy_infra:
     needs: [build]
-    uses: ppatel1604/pipeline-demo/.github/workflows/infraDeploy.yml@azure-deploy
+    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@azure-deploy
     with:
       resource_group_name: 'pipeline-demo'
       bicep_parameters:  './buildArtifacts/dev.parameters.json'
-    secrets:
-     azure_credentials: ${{ secrets.azure_credentials }}
-     subscription_id: ${{ secrets.subscription_id }}
-
-  deploy_webapp:
-    needs: [docker,deploy_infra]
-    uses: ppatel1604/pipeline-demo/.github/workflows/webappDeploy.yml@azure-deploy
-    with:
       webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
+     subscription_id: ${{ secrets.subscription_id }}
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
