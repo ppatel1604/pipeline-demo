@@ -8,10 +8,21 @@ on:
         type: string
         description: Name of the resoruce group where the resources will be deployed
 
+      bicep_parameters:
+        required: true
+        type: string
+        description: Parameters used with the bicep file for deployment
+
       region:
         required: false
         type: string
         default: 'west us'
+        description: Azure region name for the resources
+
+      bicep_file_path:
+        required: false
+        type: string
+        default: './buildArtifacts/main.bicep'
         description: Azure region name for the resources
       
     secrets:
@@ -33,7 +44,7 @@ jobs:
           creds: ${{secrets.azure_credentials}}
           enable-AzPSSession: true
       
-      - name: Check resource group
+      - name: Check if resource group exists
         uses: azure/powershell@v1
         with:
           inlineScript: |
@@ -62,6 +73,6 @@ jobs:
         with:
           subscriptionId: ${{ secrets.subscription_id }}
           resourceGroupName: ${{ inputs.resource_group_name }}
-          template: ./buildArtifacts/main.bicep
-          parameters: ./buildArtifacts/dev.parameters.json
+          template: ${{ inputs.bicep_file_path }}
+          parameters: ${{ inputs.bicep_parameters }}
           failOnStdErr: false
