@@ -38,7 +38,7 @@ jobs:
      subscription_id: ${{ secrets.subscription_id }}
 
   deploy_webapp:
-    needs: [build,deploy_infra]
+    needs: [docker,deploy_infra]
     uses: ppatel1604/pipeline-demo/.github/workflows/webappDeploy.yml@azure-deploy
     with:
       webapp_name: 'pipeline-demo'
