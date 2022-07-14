@@ -1,0 +1,33 @@
+name: Clean up Infra
+
+on:
+  workflow_call:      
+    inputs:
+      resource_group_name:
+        required: true
+        type: string
+        description: Name of the resoruce group where the resources will be deployed
+
+    secrets:
+      azure_credentials:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Cleanup
+    steps:
+      - uses: actions/download-artifact@v3
+        
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.azure_credentials}}
+          enable-AzPSSession: true
+      
+      - name: Check if resource group exists
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Remove-AzResourceGroup -Name "${{ inputs.resource_group_name }}" -Force
+          azPSVersion: "latest"

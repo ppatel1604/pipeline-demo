@@ -1,7 +1,7 @@
 // Parameters
 param environmentShortCode string
-param regionShortCode string = 'wus'
-param location string = 'west us'
+param regionShortCode string
+param location string
 param appPlanName string = '${environmentShortCode}-appServicePlan-${regionShortCode}'
 
 @minValue(1)
@@ -36,7 +36,6 @@ param aspTier string = 'Free'
 
 param webappName string = '${environmentShortCode}-webApp-${regionShortCode}'
 
-
 // App Service Plan
 resource AppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: appPlanName
@@ -54,7 +53,7 @@ resource AppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
     tier: aspTier
   }
   kind: 'linux'
-  properties:{
+  properties: {
     reserved: true
   }
 }
