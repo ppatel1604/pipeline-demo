@@ -62,7 +62,7 @@ jobs:
      docker_login_password: ${{ secrets.docker_login_password }}
 
   deploy_prd:
-    needs: [deploy_prd]
+    needs: [deploy_stg]
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
       resource_group_name: 'pipeline-demo'
