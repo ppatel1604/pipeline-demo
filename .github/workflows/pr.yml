@@ -35,3 +35,4 @@ jobs:
       resource_group_name: 'pipeline-demo'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
+     subscription_id: ${{ secrets.subscription_id }}
