@@ -30,7 +30,7 @@ jobs:
 
   deploy_infra:
     needs: [build, docker]
-    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@azure-deploy
+    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
       resource_group_name: 'pipeline-demo'
       bicep_parameters:  './buildArtifacts/dev.parameters.json'
