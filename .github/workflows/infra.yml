@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/download-artifact@v3
@@ -22,7 +22,6 @@ jobs:
       
       - name: Check resource group
         run: |
-          $resourceGroup = Get-AzureRmResourceGroup -Name "pipeline-demo"
+          $resourceGroup = Get-AzResourceGroup -Name "pipeline-demo"
           echo $resourceGroup
-
-      
+        shell: powershell
