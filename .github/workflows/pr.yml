@@ -29,7 +29,7 @@ jobs:
       docker_login_password: ${{ secrets.docker_login_password }}
 
   deploy_infra:
-    needs: [build]
+    needs: [build, docker]
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@azure-deploy
     with:
       resource_group_name: 'pipeline-demo'
