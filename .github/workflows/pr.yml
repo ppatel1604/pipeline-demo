@@ -47,3 +47,4 @@ jobs:
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
      docker_login_username: ${{ secrets.docker_login_username }}
+     docker_login_password: ${{ secrets.docker_login_password }}
