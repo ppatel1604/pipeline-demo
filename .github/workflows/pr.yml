@@ -30,6 +30,6 @@ jobs:
 
   deploy_infra:
     needs: [build, docker]
-    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@azure-deploy
+    uses: ppatel1604/pipeline-demo/.github/workflows/infra.yml@azure-deploy
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
