@@ -13,7 +13,16 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
+        
+      - name: Login via Az module
+        uses: azure/login@v1
         with:
-          name: ${{ needs.first-job.outputs.artifact_name }}
+          creds: ${{secrets.azure_credentials}}
+          enable-AzPSSession: true
+      
+      - name: Check resource group
+        run: |
+          $resourceGroup = Get-AzureRmResourceGroup -Name "pipeline-demo"
+          echo $resourceGroup
 
       
