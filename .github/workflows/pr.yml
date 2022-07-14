@@ -40,7 +40,7 @@ jobs:
       webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
-      region: 'west us'
+      region: 'west us 3'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
      subscription_id: ${{ secrets.subscription_id }}
