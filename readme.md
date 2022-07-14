@@ -1,7 +1,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/ppatel1604/pipeline-demo/badge.svg?branch=pr-workflow)](https://coveralls.io/github/ppatel1604/pipeline-demo?branch=pr-workflow)
 
 # Pipeline Demo App
-The application is built to demo the ideal pipeline as per my thinking. The project follows [github flow](https://docs.github.com/en/get-started/quickstart/github-flow). The pipeline is created using the github actions reusable workflows. It is containing two main pipelines
+The application is built to demo the ideal pipeline as per my thinking. The project follows [github flow](https://docs.github.com/en/get-started/quickstart/github-flow). The pipeline is created using the github actions reusable workflows. The [reusable workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) allows us to created different workflows without repeating the code. 
+<br />
+<br />It is containing two main workflows
 1. Pull Request - Triggers on when a PR is created against main branch
 2. Continuous Integrations and Deployment - Triggers on when a PR is merged into the main branch
 
@@ -111,3 +113,9 @@ graph TD;
     Branch --> Build --> Docker --> Deploy tst --> Deploy stg --> Deploy prd;
     Branch --> CodeQL Analysis
 ```
+
+## Notes
+- For the demo purposes, there is only one environment for the PR validation. In real scenario, the environments can be created per pr using the branch name or sha
+- To make development faster, the main workflows contains some hard code string. The major reason for this hard coded string is because the [limitations](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111) for reusable workflow. The reusable workflows do not have access to any env set on the workflow level.
+<br /> As per the [thread](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111), there is a workaround available which will be done in the future to share the variables between jobs and reduce the duplications
+- For the demo purposes, the clean up job only waits for 15 mins as we are using the github environments. It also allows us to start the job on a review. There is also an option to run the clean up job on the PR merge.
