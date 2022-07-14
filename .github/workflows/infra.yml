@@ -1,0 +1,19 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_call:      
+
+    secrets:
+      azure_credentials:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.first-job.outputs.artifact_name }}
+
+      

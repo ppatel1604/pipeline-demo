@@ -27,3 +27,9 @@ jobs:
     secrets:
       docker_login_username: ${{ secrets.docker_login_username }}
       docker_login_password: ${{ secrets.docker_login_password }}
+
+  deploy_infra:
+    needs: [build, docker]
+    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@azure-deploy
+    secrets:
+     azure_credentials: ${{ secrets.azure_credentials }}
