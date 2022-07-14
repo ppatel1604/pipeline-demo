@@ -54,7 +54,7 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            New-AzResourceGroup -Name ${{ inputs.resource_group_name }} -Location ${{ inputs.region }}
+            New-AzResourceGroup -Name "${{ inputs.resource_group_name }}" -Location "${{ inputs.region }}"
           azPSVersion: "latest"
 
       - name: Deploy infra
