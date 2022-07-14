@@ -127,3 +127,4 @@ graph TD;
 - Update clean workflow so can be triggered on merge to reduce the manual work
 - Create CodeQL reduce the analysis workflow time
 - Create github environments for each CI stage
+- Find way to use script instead on inline script for azure cli
