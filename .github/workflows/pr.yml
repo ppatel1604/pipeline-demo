@@ -35,7 +35,7 @@ jobs:
     needs: [build, docker]
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
-      resource_group_name: 'pipeline-demo'
+      resource_group_name: 'dev-pipeline-demo-wus'
       bicep_parameters:  './buildArtifacts/dev.parameters.json'
       webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
@@ -45,3 +45,9 @@ jobs:
      subscription_id: ${{ secrets.subscription_id }}
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
+
+  cleanup_infra:
+   needs: deploy_infra
+   uses: ppatel1604/pipeline-demo/.github/workflows/cleanup.yml@main
+   with:
+    resource_group_name: 'pipeline-demo'
