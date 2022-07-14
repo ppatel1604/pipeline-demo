@@ -1,0 +1,44 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_call:      
+    inputs:
+      webapp_name:
+        required: true
+        type: string
+        description: Name of the webapp
+
+      docker_image_tag:
+        required: true
+        type: string
+        description: Docker tag used for the image
+
+      docker_repository_name:
+        required: true
+        type: string
+        description: Docker repository name for the new images
+      
+    secrets:
+      azure_credentials:
+        required: true
+      docker_login_username:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/download-artifact@v3
+        
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.azure_credentials}}
+          enable-AzPSSession: true
+      
+      - name: Deploy webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ inputs.webapp_name }}
+          images: ${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:${{ inputs.docker_image_tag }}

@@ -65,6 +65,3 @@ jobs:
           template: ./buildArtifacts/main.bicep
           parameters: ./buildArtifacts/dev.parameters.json
           failOnStdErr: false
-
-      
-        
