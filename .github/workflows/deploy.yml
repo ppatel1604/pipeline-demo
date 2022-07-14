@@ -97,6 +97,7 @@ jobs:
           template: ${{ inputs.bicep_file_path }}
           parameters: ${{ inputs.bicep_parameters }}
           failOnStdErr: false
+          deploymentName: 'Deployment_${{ inputs.docker_image_tag }}'
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
