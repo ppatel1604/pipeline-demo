@@ -29,9 +29,8 @@ on:
         description: Docker repository name for the new images
 
       region:
-        required: false
+        required: true
         type: string
-        default: 'west us'
         description: Azure region name for the resources
 
       bicep_file_path:

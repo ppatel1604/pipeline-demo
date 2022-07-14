@@ -40,6 +40,7 @@ jobs:
       webapp_name: tst-webApp-cac
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
+      region: 'canada central'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
      subscription_id: ${{ secrets.subscription_id }}
@@ -55,6 +56,7 @@ jobs:
       webapp_name: stg-webApp-aus
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
+      region: 'australia southeast'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
      subscription_id: ${{ secrets.subscription_id }}
@@ -70,6 +72,7 @@ jobs:
       webapp_name: prd-webApp-neu
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
+      region: 'north europe'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
      subscription_id: ${{ secrets.subscription_id }}
