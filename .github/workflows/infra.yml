@@ -24,6 +24,31 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            $resourceGroup = Get-AzResourceGroup -Name "pipeline-demo"
-            echo $resourceGroup
+            Get-AzResourceGroup -Name "pipeline-demo" -ErrorVariable notPresent -ErrorAction SilentlyContinue
+            if ($notPresent)
+            {
+                echo "Resource Group Exists"
+            }
+            else
+            {
+                echo "Resource Group does not Exists"
+            }
           azPSVersion: "latest"
+
+      - name: Check resource group
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Get-AzResourceGroup -Name "pipeline-demo" -ErrorVariable notPresent -ErrorAction SilentlyContinue
+            if ($notPresent)
+            {
+                echo "Resource Group Exists"
+            }
+            else
+            {
+                echo "Resource Group does not Exists"
+            }
+          azPSVersion: "latest"
+
+      - run: echo "hello world"
+        
