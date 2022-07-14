@@ -1,7 +1,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/ppatel1604/pipeline-demo/badge.svg?branch=pr-workflow)](https://coveralls.io/github/ppatel1604/pipeline-demo?branch=pr-workflow)
 
 # Pipeline Demo App
-The application is built to demo the ideal pipeline as per my thinking. The project follows [github flow](https://docs.github.com/en/get-started/quickstart/github-flow). The pipeline is created using the github actions reusable workflows. The [reusable workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) allows us to created different workflows without repeating the code. 
+The application is built to demo the ideal pipeline as per my thinking. The project follows [github flow](https://docs.github.com/en/get-started/quickstart/github-flow). The pipeline is created using the github actions reusable workflows. The [reusable workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) allows us to created different workflows without repeating the code. The reusable workflow also allows us to replace a sub flow of the main workflow easily e.g. changing the cloud service provider here will require only changing the deploy and clean reusable workflows while the build, docker and analysis can stay as it is.
 <br />
 <br />It is containing two main workflows
 1. Pull Request - Triggers on when a PR is created against main branch
