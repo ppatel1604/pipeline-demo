@@ -96,7 +96,7 @@ The application is built to demo the ideal pipeline as per my thinking. The proj
    - Cleanup - Environment responsible to make the workflow wait for 15 mins and start the clean up job as part of the whole flow
 
 ## Main workflows
-#### 1. Pull Request
+#### 1. Pull Request (PR)
 The workflow uses the build, analysis, docker, deploy and clean up reusable workflows. The workflow will be triggered when a pr is created against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources, temporary resources for the dev testing and clean up.
 
 ```mermaid
@@ -105,7 +105,7 @@ graph TD;
     Branch --> CodeQL Analysis
 ```
 
-#### 2. Continuous Integration and Deployment
+#### 2. Continuous Integration and Deployment (CI)
    <br /> The workflow uses the build, analysis, docker and deploy reusable workflows. The workflow will be triggered when a pr is merged against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources and deploy the resources with the correct image into different regions
 
 ```mermaid
@@ -119,3 +119,11 @@ graph TD;
 - To make development faster, the main workflows contains some hard code string. The major reason for this hard coded string is because the [limitations](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111) for reusable workflow. The reusable workflows do not have access to any env set on the workflow level.
 <br /> As per the [thread](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111), there is a workaround available which will be done in the future to share the variables between jobs and reduce the duplications
 - For the demo purposes, the clean up job only waits for 15 mins as we are using the github environments. It also allows us to start the job on a review. There is also an option to run the clean up job on the PR merge.
+- For the demo purposes, only clean up environment has been created. In real scenario, tst, stg and prod will have their own environments so the deployments are approved by correct reviewers
+
+## Future work
+- Making Pull request workflow more generic
+- Reduce the hard coding from the both main workflows using the outputs
+- Update clean workflow so can be triggered on merge to reduce the manual work
+- Create CodeQL reduce the analysis workflow time
+- Create github environments for each CI stage
