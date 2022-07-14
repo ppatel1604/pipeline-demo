@@ -21,7 +21,9 @@ jobs:
           enable-AzPSSession: true
       
       - name: Check resource group
-        run: |
-          $resourceGroup = Get-AzResourceGroup -Name "pipeline-demo"
-          echo $resourceGroup
-        shell: pwsh
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $resourceGroup = Get-AzResourceGroup -Name "pipeline-demo"
+            echo $resourceGroup
+          azPSVersion: "latest"
