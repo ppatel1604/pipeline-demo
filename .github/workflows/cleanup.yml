@@ -29,5 +29,14 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Remove-AzResourceGroup -Name "${{ inputs.resource_group_name }}" -Force
+            Get-AzResourceGroup -Name ${{ inputs.resource_group_name }} -ErrorVariable notPresent -ErrorAction SilentlyContinue
+            if (-not $notPresent)
+            {
+                echo "Resource Group Exists"
+                Remove-AzResourceGroup -Name "${{ inputs.resource_group_name }}" -Force
+            }
+            else
+            {
+                echo "Resource Group does not Exists. No need to perform cleanup"
+            }
           azPSVersion: "latest"
