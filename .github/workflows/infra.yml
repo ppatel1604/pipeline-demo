@@ -2,9 +2,22 @@ name: Deploy Infrastructure
 
 on:
   workflow_call:      
+    inputs:
+      resource_group_name:
+        required: true
+        type: string
+        description: Name of the resoruce group where the resources will be deployed
 
+      region:
+        required: false
+        type: string
+        default: 'west us'
+        description: Azure region name for the resources
+      
     secrets:
       azure_credentials:
+        required: true
+      subscription_id:
         required: true
 
 jobs:
@@ -24,7 +37,7 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Get-AzResourceGroup -Name "pipeline-demo" -ErrorVariable notPresent -ErrorAction SilentlyContinue
+            Get-AzResourceGroup -Name ${{ inputs.resource_group_name }} -ErrorVariable notPresent -ErrorAction SilentlyContinue
             if ($notPresent)
             {
                 echo "Resource Group Exists"
@@ -32,23 +45,26 @@ jobs:
             else
             {
                 echo "Resource Group does not Exists"
+                echo "create_resource_group=true" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
             }
           azPSVersion: "latest"
 
-      - name: Check resource group
+      - name: Create resource group
+        if: ${{ create_resource_group }}
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Get-AzResourceGroup -Name "pipeline-demo" -ErrorVariable notPresent -ErrorAction SilentlyContinue
-            if ($notPresent)
-            {
-                echo "Resource Group Exists"
-            }
-            else
-            {
-                echo "Resource Group does not Exists"
-            }
+            New-AzResourceGroup -Name ${{ inputs.resource_group_name }} -Location ${{ inputs.region }}
           azPSVersion: "latest"
 
-      - run: echo "hello world"
+      - name: Deploy infra
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.subscription_id }}
+          resourceGroupName: ${{ inputs.resource_group_name }}
+          template: ./main.bicep
+          parameters: ./dev.parameters.json
+          failOnStdErr: false
+
+      
         

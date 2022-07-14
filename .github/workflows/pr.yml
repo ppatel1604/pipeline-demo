@@ -31,5 +31,7 @@ jobs:
   deploy_infra:
     needs: [build]
     uses: ppatel1604/pipeline-demo/.github/workflows/infra.yml@azure-deploy
+    with:
+      resource_group_name: 'pipeline-demo'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
