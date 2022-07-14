@@ -42,7 +42,7 @@ jobs:
     needs: [docker,deploy_infra]
     uses: ppatel1604/pipeline-demo/.github/workflows/webappDeploy.yml@azure-deploy
     with:
-      webapp_name: 'pipeline-demo'
+      webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
     secrets:
