@@ -45,12 +45,12 @@ jobs:
             else
             {
                 echo "Resource Group does not Exists"
-                echo "create_resource_group=true" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+                echo "create_resource_group=$true" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
             }
           azPSVersion: "latest"
 
       - name: Create resource group
-        if: ${{ create_resource_group }}
+        if: ${{ env.create_resource_group }}
         uses: azure/powershell@v1
         with:
           inlineScript: |
