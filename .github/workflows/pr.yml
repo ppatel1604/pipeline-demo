@@ -18,7 +18,7 @@ jobs:
       config_file_path: ./.github/codeql/config.yml
 
   docker:
-    needs: [build, analysis]
+    needs: [build]
     uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@main
     with:
       docker_file_directory: ./Web.api
