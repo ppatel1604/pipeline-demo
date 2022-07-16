@@ -15,6 +15,7 @@ jobs:
           echo "::set-output name::docker_repository_name=pipeline-demo"
     outputs:
       docker_repository_name: ${{ steps.output.outputs.docker_repository_name }}
+
   build:
     uses: ./.github/workflows/build.yml
     with:
@@ -31,7 +32,7 @@ jobs:
       config_file_path: ./.github/codeql/config.yml
 
   docker:
-    needs: [build]
+    needs: [build, setup]
     uses: ./.github/workflows/docker.yml
     with:
       docker_file_directory: ./Web.api
@@ -41,7 +42,7 @@ jobs:
       docker_login_password: ${{ secrets.docker_login_password }}
 
   deploy_infra:
-    needs: [build, docker]
+    needs: [build, docker, setup]
     uses: ./.github/workflows/deploy.yml
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
