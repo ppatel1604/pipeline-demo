@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Variables
-        id: output
+        id: set_output
         run: |
-          echo "::set-output name::docker_repository_name=pipeline-demo"
+          echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
     outputs:
-      docker_repository_name: ${{ steps.output.outputs.docker_repository_name }}
-      
+      docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
+
   build:
     uses: ./.github/workflows/build.yml
     with:
