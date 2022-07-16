@@ -36,7 +36,7 @@ on:
       bicep_file_path:
         required: false
         type: string
-        default: './buildArtifacts/main.bicep'
+        default: './main.bicep'
         description: Azure region name for the resources
       
     secrets:

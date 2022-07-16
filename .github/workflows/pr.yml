@@ -37,7 +37,7 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@healthcheck
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
-      bicep_parameters:  './buildArtifacts/dev.parameters.json'
+      bicep_parameters:  './dev.parameters.json'
       webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
