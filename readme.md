@@ -97,23 +97,34 @@ The application is built to demo the ideal pipeline as per my thinking. The proj
 - Github environment associated
    - Cleanup - Environment responsible to make the workflow wait for 15 mins and start the clean up job as part of the whole flow
 
+#### 6. Healthcheck.yml
+- The workflow is responsible for the following steps:
+   - Download artifact
+   - Perform health check (custom script)
+
+- Inputs required for Workflow
+   - webappUrl - Url of the webapp for the health check step
+   
 ## Main workflows
 #### 1. Pull Request (PR)
-The workflow uses the build, analysis, docker, deploy and clean up reusable workflows. The workflow will be triggered when a pr is created against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources, temporary resources for the dev testing and clean up.
+The workflow uses the build, analysis, docker, deploy and clean up reusable workflows. The workflow will be triggered when a pr is created against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources, temporary resources for the dev testing, confirm the webapp is responding on the health check endpoint and clean up.
 
 ```mermaid
 graph TD;
-   A[Branch] --> B[Build] --> C[Docker] --> D[Deploy] --> E[Cleanup]
+   A[Branch] --> B[Build] --> C[Docker] --> D[Deploy] --> E[HealthCheck] --> F[Cleanup]
    A[Branch] --> F(CodeQL Analysis)
 ```
 
 #### 2. Continuous Integration and Deployment (CI)
-   <br /> The workflow uses the build, analysis, docker and deploy reusable workflows. The workflow will be triggered when a pr is merged against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources and deploy the resources with the correct image into different regions
+   <br /> The workflow uses the build, analysis, docker and deploy reusable workflows. The workflow will be triggered when a pr is merged against the `main` branch. It will do the validation for the by building and running the automated tests, building the docker image required for the resources and deploy the resources with the correct image into different regions and perform the health check for each region after the deployment
 
 ```mermaid
 graph TD;
-   A[Branch] --> B[Build] --> C[Docker] --> D(Deploy tst) --> E(Deploy stg) --> F(Deploy prd);
-   A[Branch] --> G(CodeQL Analysis)
+  A[Branch] --> B[Build] --> C[Docker] --> D(Deploy tst) --> E(Deploy stg) --> F(Deploy prd);
+  A[Branch] --> G(CodeQL Analysis)
+  D[Deploy tst] --> H[HealthCheck tst]
+  E[Deploy stg] --> I[HealthCheck stg]
+  F[Deploy prd] --> J[HealthCheck prd]
 ```
 
 ## Notes
