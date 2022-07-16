@@ -113,3 +113,4 @@ jobs:
         with:
           app-name: ${{ inputs.webapp_name }}
           images: ${{ secrets.docker_login_username }}/${{ inputs.docker_repository_name }}:${{ inputs.docker_image_tag }}
+        timeout-minutes: 5 # Putting timeout. Sometimes webapp deployment stuck after the deployment
