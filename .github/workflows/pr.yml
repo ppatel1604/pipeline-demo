@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@${{ github.event.pull_request.head.ref }}
+    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@${{github.event.pull_request.head.ref}}
     with:
       solution_path: ./Web.api/Web.api.sln
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
@@ -17,7 +17,7 @@ jobs:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
 
   analysis:
-    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@${{ github.event.pull_request.head.ref }}
+    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@${{github.event.pull_request.head.ref}}
     with:
       config_file_path: ./.github/codeql/config.yml
 
@@ -34,7 +34,7 @@ jobs:
 
   deploy_infra:
     needs: [build, docker]
-    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@${{ github.event.pull_request.head.ref }}
+    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@${{github.event.pull_request.head.ref}}
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
       bicep_parameters:  './dev.parameters.json'
@@ -50,13 +50,13 @@ jobs:
 
   health_check:
     needs: deploy_infra
-    uses: ppatel1604/pipeline-demo/.github/workflows/healthcheck.yml@${{ github.event.pull_request.head.ref }}
+    uses: ppatel1604/pipeline-demo/.github/workflows/healthcheck.yml@${{github.event.pull_request.head.ref}}
     with:
       webappUrl: 'https://dev-webapp-wus.azurewebsites.net'
 
   cleanup_infra:
     needs: [deploy_infra, health_check]
-    uses: ppatel1604/pipeline-demo/.github/workflows/cleanup.yml@${{ github.event.pull_request.head.ref }}
+    uses: ppatel1604/pipeline-demo/.github/workflows/cleanup.yml@${{github.event.pull_request.head.ref}}
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
     secrets:
