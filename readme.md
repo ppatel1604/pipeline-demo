@@ -112,7 +112,7 @@ The workflow uses the build, analysis, docker, deploy and clean up reusable work
 ```mermaid
 graph TD;
    A[Branch] --> B[Build] --> C[Docker] --> D[Deploy] --> E[HealthCheck] --> F[Cleanup]
-   A[Branch] --> F(CodeQL Analysis)
+   A[Branch] --> G(CodeQL Analysis)
 ```
 
 #### 2. Continuous Integration and Deployment (CI)
