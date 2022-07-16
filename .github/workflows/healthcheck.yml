@@ -14,10 +14,11 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
+        id: download
         with:
           name: healthCheck
 
       - name: Check webapp response
         shell: powershell
         run: |
-          ./healthCheck/HealthCheck.ps1 -WebAppUrl "${{ inputs.workflow_call }}"
+          ./healthCheck/HealthCheck.ps1 -WebAppUrl "${{steps.download.outputs.download-path}}/${{ inputs.workflow_call }}"
