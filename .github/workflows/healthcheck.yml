@@ -21,4 +21,5 @@ jobs:
       - name: Check webapp response
         shell: powershell
         run: |
-          ./${{steps.download.outputs.download-path}}/HealthCheck.ps1 -WebAppUrl "${{ inputs.webappUrl }}"
+          ./HealthCheck.ps1 -WebAppUrl "${{ inputs.webappUrl }}"
+        working-directory: ${{steps.download.outputs.download-path}}
