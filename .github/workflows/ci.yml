@@ -11,7 +11,8 @@ jobs:
     with:
       solution_path: ./Web.api/Web.api.sln
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
-      artifacts_file_path: ./operations
+      build_artifacts_file_path: ./operations
+      healthcheck_artifacts_file_path: .github/scripts
     secrets:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
 
