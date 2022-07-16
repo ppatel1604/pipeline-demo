@@ -60,6 +60,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: buildArtifacts
+          path: .
 
       - name: Login via Az module
         uses: azure/login@v1
