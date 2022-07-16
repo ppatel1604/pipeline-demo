@@ -6,7 +6,7 @@ on:
       resource_group_name:
         required: true
         type: string
-        description: Name of the resoruce group where the resources will be deployed
+        description: Name of the resource group where the resources will be deployed
 
     secrets:
       azure_credentials:
@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: Cleanup
     steps:
-      - uses: actions/download-artifact@v3
-        
       - name: Login via Az module
         uses: azure/login@v1
         with:

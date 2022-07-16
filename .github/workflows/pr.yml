@@ -7,22 +7,23 @@ on:
 
 jobs:
   build:
-    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@main
+    uses: ppatel1604/pipeline-demo/.github/workflows/build.yml@healthcheck
     with:
       solution_path: ./Web.api/Web.api.sln
       coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
-      artifacts_file_path: ./operations
+      build_artifacts_file_path: ./operations
+      healthcheck_artifacts_file_path: .github/scripts
     secrets:
       code_coverage_token: ${{ secrets.GITHUB_TOKEN }}
 
   analysis:
-    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@main
+    uses: ppatel1604/pipeline-demo/.github/workflows/codeql.yml@healthcheck
     with:
       config_file_path: ./.github/codeql/config.yml
 
   docker:
     needs: [build]
-    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@main
+    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@healthcheck
     with:
       docker_file_directory: ./Web.api
       docker_repository_name: pipeline-demo
@@ -33,7 +34,7 @@ jobs:
 
   deploy_infra:
     needs: [build, docker]
-    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
+    uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@healthcheck
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
       bicep_parameters:  './buildArtifacts/dev.parameters.json'
@@ -47,9 +48,15 @@ jobs:
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
 
-  cleanup_infra:
+  health_check:
     needs: deploy_infra
-    uses: ppatel1604/pipeline-demo/.github/workflows/cleanup.yml@main
+    uses: ppatel1604/pipeline-demo/.github/workflows/healthcheck.yml@healthcheck
+    with:
+      webappUrl: 'https://dev-webapp-wus.azurewebsites.net'
+
+  cleanup_infra:
+    needs: [deploy_infra, health_check]
+    uses: ppatel1604/pipeline-demo/.github/workflows/cleanup.yml@healthcheck
     with:
       resource_group_name: 'dev-pipeline-demo-wus'
     secrets:

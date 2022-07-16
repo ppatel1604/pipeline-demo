@@ -58,7 +58,9 @@ jobs:
     
     steps:
       - uses: actions/download-artifact@v3
-        
+        with:
+          name: buildArtifacts
+
       - name: Login via Az module
         uses: azure/login@v1
         with:
