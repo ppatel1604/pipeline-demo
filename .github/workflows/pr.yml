@@ -32,7 +32,7 @@ jobs:
 
   docker:
     needs: [build]
-    uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@healthcheck
+    uses: ./.github/workflows/docker.yml
     with:
       docker_file_directory: ./Web.api
       docker_repository_name: ${{ jobs.setup.outputs.docker_repository_name }}
