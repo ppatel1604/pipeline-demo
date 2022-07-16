@@ -14,10 +14,15 @@ on:
         type: string
         description: Path to coverage file
 
-      artifacts_file_path:
+      build_artifacts_file_path:
         required: true
         type: string
-        description: Path for the artifact files/directories
+        description: Path for the build artifact files/directories
+
+      healthcheck_artifacts_file_path:
+        required: true
+        type: string
+        description: Path for the health-check artifact files/directories
 
       dotnet_versiosns:
         required: false
@@ -46,6 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       build_artifact_name: buildArtifacts
+      healthcheck_artifact_name: healthCheck
     strategy:
       matrix:
         dotnet-version: ['${{inputs.dotnet_versiosns}}']
@@ -100,4 +106,12 @@ jobs:
         with:
           name: ${{ env.build_artifact_name }}
           path: |
-            ${{ inputs.artifacts_file_path }}
+            ${{ inputs.build_artifacts_file_path }}
+
+      - name: Upload health-check artifacts
+        if: ${{ inputs.upload_artifacts }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.healthcheck_artifact_name }}
+          path: |
+            ${{ inputs.healthcheck_artifacts_file_path }}

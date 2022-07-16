@@ -1,0 +1,25 @@
+name: Perform Health-check
+
+on:
+  workflow_call:      
+    inputs:
+      webappUrl:
+        required: true
+        type: string
+        description: Url for the webapp to be used for health-check
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: healthCheck
+
+      - name: Check webapp response
+        shell: powershell
+        run: |
+          ./HealthCheck.ps1 -WebAppUrl "${{ inputs.webappUrl }}"
+        working-directory: ${{steps.download.outputs.download-path}}

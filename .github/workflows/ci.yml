@@ -46,6 +46,12 @@ jobs:
      subscription_id: ${{ secrets.subscription_id }}
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
+  
+  health_check_tst:
+    needs: [deploy_tst]
+    uses: ./.github/workflows/healthcheck.yml
+    with:
+      webappUrl: 'https://tst-webapp-cac.azurewebsites.net'
 
   deploy_stg:
     needs: [deploy_tst]
@@ -62,6 +68,12 @@ jobs:
      subscription_id: ${{ secrets.subscription_id }}
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
+  
+  health_check_stg:
+    needs: [deploy_stg]
+    uses: ./.github/workflows/healthcheck.yml
+    with:
+      webappUrl: 'https://stg-webapp-aus.azurewebsites.net'
 
   deploy_prd:
     needs: [deploy_stg]
@@ -78,3 +90,9 @@ jobs:
      subscription_id: ${{ secrets.subscription_id }}
      docker_login_username: ${{ secrets.docker_login_username }}
      docker_login_password: ${{ secrets.docker_login_password }}
+
+  health_check_prd:
+    needs: [deploy_prd]
+    uses: ./.github/workflows/healthcheck.yml
+    with:
+      webappUrl: 'https://prd-webapp-neu.azurewebsites.net'
