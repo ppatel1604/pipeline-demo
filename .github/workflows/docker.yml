@@ -15,8 +15,9 @@ on:
         description: Docker tag used for the image
 
       docker_repository_name:
-        required: true
+        required: false
         type: string
+        default: ${{ jobs.setup.outputs.docker_repository_name }}
         description: Docker repository name for the new images
 
     secrets:
