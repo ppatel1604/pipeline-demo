@@ -6,6 +6,15 @@ on:
       - main
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Variables
+        id: output
+        run: |
+          echo "::set-output name::docker_repository_name=pipeline-demo"
+    outputs:
+      docker_repository_name: ${{ steps.output.outputs.docker_repository_name }}
   build:
     uses: ./.github/workflows/build.yml
     with:
@@ -26,7 +35,7 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/docker.yml@healthcheck
     with:
       docker_file_directory: ./Web.api
-      docker_repository_name: pipeline-demo
+      docker_repository_name: ${{ jobs.setup.outputs.docker_repository_name }}
       docker_image_tag: 0.0.0.${{ github.run_number }}
     secrets:
       docker_login_username: ${{ secrets.docker_login_username }}
@@ -40,7 +49,7 @@ jobs:
       bicep_parameters:  './dev.parameters.json'
       webapp_name: dev-webApp-wus
       docker_image_tag: 0.0.0.${{ github.run_number }}
-      docker_repository_name: pipeline-demo
+      docker_repository_name: ${{ jobs.setup.outputs.docker_repository_name }}
       region: 'west us'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
