@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  major_version: 0
-  minor_version: 0.0
+  major_version: '0'
+  minor_version: '0.0'
 
 jobs:
   setup:
