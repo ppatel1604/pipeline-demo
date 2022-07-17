@@ -128,7 +128,7 @@ graph TD;
 ```
 
 ## Notes
-- For the demo purposes, there is only one environment for the PR validation. In real scenario, the environments can be created per pr using the branch name or sha
+- For the demo purposes and keep the cost in budget, there is only one environment (dev) for the PR validation. In real scenario, the environments can be created per pr using the branch name or sha which can also run an extended suite of automated tests
 - To make development faster, the main workflows contains some hard code string. The major reason for this hard coded string is because the [limitations](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111) for reusable workflow. The reusable workflows do not have access to any env set on the workflow level.
 <br /> As per the [thread](https://github.community/t/reusable-workflow-env-context-not-available-in-jobs-job-id-with/206111), there is a workaround available which will be done in the future to share the variables between jobs and reduce the duplications
 - For the demo purposes, the clean up job only waits for 15 mins as we are using the github environments. It also allows us to start the job on a review. There is also an option to run the clean up job on the PR merge.
