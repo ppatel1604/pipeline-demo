@@ -34,13 +34,11 @@ jobs:
           echo "::set-output name=VERSION::$VERSION"
           echo "::set-output name=RESOURCE_GROUP_NAME::$RESOURCE_GROUP"
           echo "::set-output name=WEBAPP_NAME::$WEBAPP_NAME"
-          echo "::set-output name=WEBAPP_URL::https://$WEBAPP_NAME.azurewebsites.net"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
       version: ${{ steps.set_output.outputs.version }}
       resource_group_name: ${{ steps.set_output.outputs.resource_group_name}}
       webapp_name: ${{ steps.set_output.outputs.WEBAPP_NAME}}
-      webapp_url: ${{ steps.set_output.outputs.WEBAPP_URL}}
 
   build:
     uses: ./.github/workflows/build.yml
@@ -85,13 +83,13 @@ jobs:
      docker_login_password: ${{ secrets.docker_login_password }}
 
   health_check:
-    needs: deploy_infra
+    needs: [setup, deploy_infra]
     uses: ./.github/workflows/healthcheck.yml
     with:
-      webappUrl: ${{ needs.setup.outputs.webapp_url }}
+      webappUrl: https://${{ needs.setup.outputs.webapp_name }}.azurewebsites.net
 
   cleanup_infra:
-    needs: [deploy_infra, health_check]
+    needs: [setup, deploy_infra, health_check]
     uses: ./.github/workflows/cleanup.yml
     with:
       resource_group_name: ${{ needs.setup.outputs.resource_group_name }}
