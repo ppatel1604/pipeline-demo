@@ -9,6 +9,7 @@ env:
   major_version: '0'
   minor_version: '0.0'
   environment_short_code: 'dev'
+  root_directory_name: 'Web.api'
 
 concurrency:
   group: ${{ github.head_ref }}
@@ -30,21 +31,27 @@ jobs:
           WEBAPP_NAME=${{ env.environment_short_code }}-webApp-wus
           echo "Webapp Name: $WEBAPP_NAME"
 
+          ROOT_DIRECTORY=${{ env.root_directory_name }}
+          echo "Root Directory Name: $ROOT_DIRECTORY"
+
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
           echo "::set-output name=VERSION::$VERSION"
           echo "::set-output name=RESOURCE_GROUP_NAME::$RESOURCE_GROUP"
           echo "::set-output name=WEBAPP_NAME::$WEBAPP_NAME"
+          echo "::set-output name=ROOT_DIRECTORY_NAME::$ROOT_DIRECTORY"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
       version: ${{ steps.set_output.outputs.version }}
-      resource_group_name: ${{ steps.set_output.outputs.resource_group_name}}
-      webapp_name: ${{ steps.set_output.outputs.WEBAPP_NAME}}
+      resource_group_name: ${{ steps.set_output.outputs.resource_group_name }}
+      webapp_name: ${{ steps.set_output.outputs.WEBAPP_NAME }}
+      root_directory_name: ${{ steps.download.outputs.ROOT_DIRECTORY_NAME }}
 
   build:
+    needs: setup
     uses: ./.github/workflows/build.yml
     with:
-      solution_path: ./Web.api/Web.api.sln
-      coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
+      solution_path: ./${{ needs.setup.outputs.root_directory_name }}/Web.api.sln
+      coverage_info_file_path: ./${{ needs.setup.outputs.root_directory_name }}/Web.api.Tests/TestResults/coverage.info
       build_artifacts_file_path: ./operations
       healthcheck_artifacts_file_path: .github/scripts
     secrets:
@@ -59,7 +66,7 @@ jobs:
     needs: [build, setup]
     uses: ./.github/workflows/docker.yml
     with:
-      docker_file_directory: ./Web.api
+      docker_file_directory: ./${{ needs.setup.outputs.root_directory_name }}
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
       docker_image_tag: ${{ needs.setup.outputs.version }}
     secrets:
