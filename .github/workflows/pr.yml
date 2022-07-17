@@ -20,13 +20,6 @@ jobs:
       - name: Setup Variables
         id: set_output
         run: |
-          BRANCH=$GITHUB_HEAD_REF
-          echo $BRANCH
-          CLEAN_NAME=$(echo $BRANCH | tr -dc '[:alnum:]\n\r')
-          echo $CLEAN_NAME
-          SUFFIX=$(echo $CLEAN_NAME | cut -c 1-5)
-          echo $SUFFIX
-
           VERSION=${{ env.major_version }}.${{ env.minor_version }}.$GITHUB_RUN_NUMBER
           echo "Version Number: $VERSION"
 
