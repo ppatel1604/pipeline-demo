@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  major_version: 0
+  minor_version: 0.0
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -12,9 +16,13 @@ jobs:
       - name: Setup Variables
         id: set_output
         run: |
+          version=$MAJOR_VERSION.$MINOR_VERSION.$GITHUB_RUN_NUMBER
+          echo "Version Number: $VERSION"
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
+          echo "::set-output name=VERSION::$VERSION"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
+      version: ${{ steps.set_output.outputs.version }}
 
   build:
     uses: ./.github/workflows/build.yml
@@ -37,7 +45,7 @@ jobs:
     with:
       docker_file_directory: ./Web.api
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
-      docker_image_tag: 0.0.0.${{ github.run_number }}
+      docker_image_tag: ${{ needs.setup.outputs.version }}
     secrets:
       docker_login_username: ${{ secrets.docker_login_username }}
       docker_login_password: ${{ secrets.docker_login_password }}
@@ -49,8 +57,8 @@ jobs:
       resource_group_name: 'dev-pipeline-demo-wus'
       bicep_parameters:  './dev.parameters.json'
       webapp_name: dev-webApp-wus
-      docker_image_tag: 0.0.0.${{ github.run_number }}
-      docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
+      docker_image_tag: ${{ needs.setup.outputs.docker_repository_name }}
+      docker_repository_name: ${{ needs.setup.outputs.version }}
       region: 'west us'
     secrets:
      azure_credentials: ${{ secrets.azure_credentials }}
