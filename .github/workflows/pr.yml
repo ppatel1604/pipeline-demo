@@ -16,7 +16,7 @@ jobs:
       - name: Setup Variables
         id: set_output
         run: |
-          version=$MAJOR_VERSION.$MINOR_VERSION.$GITHUB_RUN_NUMBER
+          VERSION=${{ env.major_version }}.${{ env.minor_version }}.$GITHUB_RUN_NUMBER
           echo "Version Number: $VERSION"
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
           echo "::set-output name=VERSION::$VERSION"
