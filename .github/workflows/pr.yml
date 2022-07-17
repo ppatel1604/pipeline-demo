@@ -24,7 +24,7 @@ jobs:
           echo $BRANCH
           CLEAN_NAME=$BRANCH | tr -dc '[:alnum:]\n\r'
           echo $CLEAN_NAME
-          SUFFIX=$CLEAN_NAME | cut -c 0-5
+          SUFFIX=$CLEAN_NAME | cut -c 1-5
           echo $SUFFIX
 
           VERSION=${{ env.major_version }}.${{ env.minor_version }}.$GITHUB_RUN_NUMBER
