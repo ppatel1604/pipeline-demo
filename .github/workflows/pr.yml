@@ -72,7 +72,7 @@ jobs:
     with:
       resource_group_name: '${{ needs.setup.outputs.resource_group_name }}'
       bicep_parameters:  './dev.parameters.json'
-      webapp_name: ${{ needs.setup.outputs.webapp_name }}
+      webapp_name: ${{ needs.setup.outputs.webapp_url }}
       docker_image_tag: ${{ needs.setup.outputs.version }}
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
       region: 'west us'
