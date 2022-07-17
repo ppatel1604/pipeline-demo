@@ -9,6 +9,10 @@ env:
   major_version: '0'
   minor_version: '0.0'
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   setup:
     runs-on: ubuntu-latest
