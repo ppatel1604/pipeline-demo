@@ -20,7 +20,7 @@ jobs:
       - name: Setup Variables
         id: set_output
         run: |
-          BRANCH=${GITHUB_REF#refs/heads/}
+          BRANCH=${{ env.GITHUB_HEAD_REF }}
           echo $BRANCH
           CLEAN_NAME=$BRANCH | tr -dc '[:alnum:]\n\r'
           echo $CLEAN_NAME
