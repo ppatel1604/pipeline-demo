@@ -21,7 +21,9 @@ jobs:
         id: set_output
         run: |
           BRANCH=${GITHUB_REF#refs/heads/}
+          echo $BRANCH
           CLEAN_NAME=$BRANCH | tr -dc '[:alnum:]\n\r'
+          echo $CLEAN_NAME
           SUFFIX = ${$CLEAN_NAME:0:5}
           echo $SUFFIX
 
