@@ -8,6 +8,7 @@ on:
 env:
   major_version: '0'
   minor_version: '0.0'
+  environment_short_code: 'dev'
 
 concurrency:
   group: ${{ github.head_ref }}
@@ -23,11 +24,16 @@ jobs:
           VERSION=${{ env.major_version }}.${{ env.minor_version }}.$GITHUB_RUN_NUMBER
           echo "Version Number: $VERSION"
 
+          RESOURCE_GROUP=${{ env.environment_short_code }}-pipeline-demo-wus
+          echo "Resource Group Name: $RESOURCE_GROUP"
+
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
           echo "::set-output name=VERSION::$VERSION"
+          echo "::set-output name=RESOURCE_GROUP_NAME::$RESOURCE_GROUP"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
       version: ${{ steps.set_output.outputs.version }}
+      resource_group_name: ${{ steps.set_output.outputs.resource_group_name}}
 
   build:
     uses: ./.github/workflows/build.yml
@@ -59,7 +65,7 @@ jobs:
     needs: [build, docker, setup]
     uses: ./.github/workflows/deploy.yml
     with:
-      resource_group_name: 'dev-pipeline-demo-wus'
+      resource_group_name: '${{ needs.setup.outputs.resource_group_name }}'
       bicep_parameters:  './dev.parameters.json'
       webapp_name: dev-webApp-wus
       docker_image_tag: ${{ needs.setup.outputs.docker_repository_name }}
@@ -81,6 +87,6 @@ jobs:
     needs: [deploy_infra, health_check]
     uses: ./.github/workflows/cleanup.yml
     with:
-      resource_group_name: 'dev-pipeline-demo-wus'
+      resource_group_name: ${{ needs.setup.outputs.resource_group_name }}
     secrets:
       azure_credentials: ${{ secrets.azure_credentials }}
