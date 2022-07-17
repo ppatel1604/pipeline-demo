@@ -37,7 +37,7 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
       resource_group_name: 'tst-pipeline-demo-cac'
-      bicep_parameters:  './buildArtifacts/tst.parameters.json'
+      bicep_parameters:  './tst.parameters.json'
       webapp_name: tst-webApp-cac
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
@@ -59,7 +59,7 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
       resource_group_name: 'stg-pipeline-demo-aus'
-      bicep_parameters:  './buildArtifacts/stg.parameters.json'
+      bicep_parameters:  './stg.parameters.json'
       webapp_name: stg-webApp-aus
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
@@ -81,7 +81,7 @@ jobs:
     uses: ppatel1604/pipeline-demo/.github/workflows/deploy.yml@main
     with:
       resource_group_name: 'prd-pipeline-demo-neu'
-      bicep_parameters:  './buildArtifacts/prd.parameters.json'
+      bicep_parameters:  './prd.parameters.json'
       webapp_name: prd-webApp-neu
       docker_image_tag: 1.0.0.${{ github.run_number }}
       docker_repository_name: pipeline-demo
