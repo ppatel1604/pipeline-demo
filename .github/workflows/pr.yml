@@ -33,12 +33,14 @@ jobs:
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
           echo "::set-output name=VERSION::$VERSION"
           echo "::set-output name=RESOURCE_GROUP_NAME::$RESOURCE_GROUP"
-          echo "::set-output name=WEBAPP_URL::$WEBAPP_NAME"
+          echo "::set-output name=WEBAPP_NAME::$WEBAPP_NAME"
+          echo "::set-output name=WEBAPP_URL::https://$WEBAPP_NAME.azurewebsites.net"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
       version: ${{ steps.set_output.outputs.version }}
       resource_group_name: ${{ steps.set_output.outputs.resource_group_name}}
-      webapp_url: ${{ steps.set_output.outputs.webapp_url}}
+      webapp_name: ${{ steps.set_output.outputs.WEBAPP_NAME}}
+      webapp_url: ${{ steps.set_output.outputs.WEBAPP_URL}}
 
   build:
     uses: ./.github/workflows/build.yml
@@ -72,7 +74,7 @@ jobs:
     with:
       resource_group_name: '${{ needs.setup.outputs.resource_group_name }}'
       bicep_parameters:  './dev.parameters.json'
-      webapp_name: ${{ needs.setup.outputs.webapp_url }}
+      webapp_name: ${{ needs.setup.outputs.webapp_name }}
       docker_image_tag: ${{ needs.setup.outputs.version }}
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
       region: 'west us'
@@ -86,7 +88,7 @@ jobs:
     needs: deploy_infra
     uses: ./.github/workflows/healthcheck.yml
     with:
-      webappUrl: https://${{ needs.setup.outputs.webapp_url }}.azurewebsites.net
+      webappUrl: ${{ needs.setup.outputs.webapp_url }}
 
   cleanup_infra:
     needs: [deploy_infra, health_check]
