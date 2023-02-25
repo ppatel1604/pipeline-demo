@@ -48,7 +48,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     env:
       build_artifact_name: buildArtifacts
       healthcheck_artifact_name: healthCheck
