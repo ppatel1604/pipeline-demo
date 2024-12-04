@@ -5,6 +5,16 @@ on:
     branches:
       - main
 
+env:
+  major_version: '0'
+  minor_version: '0.0'
+  environment_short_code: 'dev'
+  root_directory_name: 'Web.api'
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -12,15 +22,36 @@ jobs:
       - name: Setup Variables
         id: set_output
         run: |
+          VERSION=${{ env.major_version }}.${{ env.minor_version }}.$GITHUB_RUN_NUMBER
+          echo "Version Number: $VERSION"
+
+          RESOURCE_GROUP=${{ env.environment_short_code }}-pipeline-demo-wus
+          echo "Resource Group Name: $RESOURCE_GROUP"
+
+          WEBAPP_NAME=${{ env.environment_short_code }}-webApp-wus
+          echo "Webapp Name: $WEBAPP_NAME"
+
+          ROOT_DIRECTORY=${{ env.root_directory_name }}
+          echo "Root Directory Name: $ROOT_DIRECTORY"
+
           echo "::set-output name=DOCKER_REPOSITORY_NAME::pipeline-demo"
+          echo "::set-output name=VERSION::$VERSION"
+          echo "::set-output name=RESOURCE_GROUP_NAME::$RESOURCE_GROUP"
+          echo "::set-output name=WEBAPP_NAME::$WEBAPP_NAME"
+          echo "::set-output name=ROOT_DIRECTORY_NAME::$ROOT_DIRECTORY"
     outputs:
       docker_repository_name: ${{ steps.set_output.outputs.docker_repository_name }}
+      version: ${{ steps.set_output.outputs.version }}
+      resource_group_name: ${{ steps.set_output.outputs.resource_group_name }}
+      webapp_name: ${{ steps.set_output.outputs.WEBAPP_NAME }}
+      root_directory_name: ${{ steps.set_output.outputs.ROOT_DIRECTORY_NAME }}
 
   build:
+    needs: setup
     uses: ./.github/workflows/build.yml
     with:
-      solution_path: ./Web.api/Web.api.sln
-      coverage_info_file_path: ./Web.api/Web.api.Tests/TestResults/coverage.info
+      solution_path: ./${{ needs.setup.outputs.root_directory_name }}/Web.api.sln
+      coverage_info_file_path: ./${{ needs.setup.outputs.root_directory_name }}/Web.api.Tests/TestResults/coverage.info
       build_artifacts_file_path: ./operations
       healthcheck_artifacts_file_path: .github/scripts
     secrets:
@@ -35,9 +66,9 @@ jobs:
     needs: [build, setup]
     uses: ./.github/workflows/docker.yml
     with:
-      docker_file_directory: ./Web.api
+      docker_file_directory: ./${{ needs.setup.outputs.root_directory_name }}
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
-      docker_image_tag: 0.0.0.${{ github.run_number }}
+      docker_image_tag: ${{ needs.setup.outputs.version }}
     secrets:
       docker_login_username: ${{ secrets.docker_login_username }}
       docker_login_password: ${{ secrets.docker_login_password }}
@@ -46,10 +77,10 @@ jobs:
     needs: [build, docker, setup]
     uses: ./.github/workflows/deploy.yml
     with:
-      resource_group_name: 'dev-pipeline-demo-wus'
+      resource_group_name: '${{ needs.setup.outputs.resource_group_name }}'
       bicep_parameters:  './dev.parameters.json'
-      webapp_name: dev-webApp-wus
-      docker_image_tag: 0.0.0.${{ github.run_number }}
+      webapp_name: ${{ needs.setup.outputs.webapp_name }}
+      docker_image_tag: ${{ needs.setup.outputs.version }}
       docker_repository_name: ${{ needs.setup.outputs.docker_repository_name }}
       region: 'west us'
     secrets:
@@ -59,15 +90,15 @@ jobs:
      docker_login_password: ${{ secrets.docker_login_password }}
 
   health_check:
-    needs: deploy_infra
+    needs: [setup, deploy_infra]
     uses: ./.github/workflows/healthcheck.yml
     with:
-      webappUrl: 'https://dev-webapp-wus.azurewebsites.net'
+      webappUrl: https://${{ needs.setup.outputs.webapp_name }}.azurewebsites.net
 
   cleanup_infra:
-    needs: [deploy_infra, health_check]
+    needs: [setup, deploy_infra, health_check]
     uses: ./.github/workflows/cleanup.yml
     with:
-      resource_group_name: 'dev-pipeline-demo-wus'
+      resource_group_name: ${{ needs.setup.outputs.resource_group_name }}
     secrets:
       azure_credentials: ${{ secrets.azure_credentials }}
